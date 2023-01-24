@@ -17,7 +17,7 @@
 /**
  * On d�clare une variable static qui permet de retenir la page courante affich�e
  */
-static ihm_typePage type_page_courante = Page_Config;
+static ihm_typePage type_page_courante = Page_Accueil;
 
 //------------------------------------------------------------------------------------------------------------------
 
