@@ -1,11 +1,17 @@
 /**
   ******************************************************************************
   * @file    main.c
-  * @author  Nirgal
-  * @date    03-July-2019
+  * @author  bourdahu & bourhima
+  * @date    10 nov. 2022
   * @brief   Default main function.
   ******************************************************************************
 */
+
+//------------------------------------------------------------------------------------------------------------------
+
+/**
+ * Biblioteques
+ */
 #include "stm32f1xx_hal.h"
 #include "stm32f1_uart.h"
 #include "stm32f1_sys.h"
@@ -15,32 +21,37 @@
 #include "tft_ili9341/stm32f1_ili9341.h"
 #include "tft_ili9341/stm32f1_xpt2046.h"
 #include "datas/datas.h"
+#include "buzzer/buzzer.h"
+#include "drapeau/drapeau.h"
 
+//------------------------------------------------------------------------------------------------------------------
 
-
+/**
+ * @brief Permet de mettre a jour l'etat d'une led
+ * @param b : l'etat de la led
+ */
 void writeLED(bool_e b)
 {
 	HAL_GPIO_WritePin(LED_GREEN_GPIO, LED_GREEN_PIN, b);
 }
 
+//------------------------------------------------------------------------------------------------------------------
 
-
+/**
+ * @brief Permet de connaitre l'etat du bouton
+ * @ret true si bas, false sinon
+ */
 bool_e readButton(void)
 {
 	return !HAL_GPIO_ReadPin(BLUE_BUTTON_GPIO, BLUE_BUTTON_PIN);
 }
 
-/*
-static volatile uint32_t t = 0;
+//------------------------------------------------------------------------------------------------------------------
 
-void process_ms(void)
-{
-	if(t)
-		t--;
-}
-*/
-
-
+/**
+ * @brief fonction principale : main
+ * @ret int
+ */
 int main(void)
 {
 	//Initialisation de la couche logicielle HAL (Hardware Abstraction Layer)
@@ -65,23 +76,32 @@ int main(void)
 	//Systick_add_callback_function(&process_ms);
 
 
-	//On initialise l'�cran
+	//On initialise l'ecran
 	ILI9341_Init();
 	XPT2046_init();
 	ILI9341_Rotate(ILI9341_Orientation_Landscape_2);
 
-	//On affiche la page de configuration :
-	//ihm_AffichePageCourante();
-
+	//On initialise le buffer, le buzzer, l'ecran, et les servomoteurs
 	initBuffer();
+	initBuzzer();
+	updateServos();
 	initScreen();
 
-	//XPT2046_demo();
-
-	while(1)	//boucle de t�che de fond
+	//Tache de fond
+	while(1)
 	{
+		//On regarde si des donnees sont recues par bluetooth
 		if(UART_data_ready(UART2_ID)) {
+			//Si oui, on les ajoute au buffer
 			addToBuffer();
+			//S'il s'agit des fautes, on met a jour l'etat des servomoteurs
+			if (getTypeCourant()==fautes_loc || getTypeCourant()==fautes_visit) {
+				updateServos();
+			}
+			//S'il s'agit du chrono, on met a jour l'etat du chrono et du buzzer
+			if (getTypeCourant()==chrono_state) {
+				updateBuzzer();
+			}
 		}
 	}
 }
