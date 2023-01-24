@@ -14,7 +14,7 @@
 #include "systick.h"
 #include "tft_ili9341/stm32f1_ili9341.h"
 #include "tft_ili9341/stm32f1_xpt2046.h"
-#include "affichage/affichage.h"
+#include "datas/datas.h"
 
 
 
@@ -30,14 +30,15 @@ bool_e readButton(void)
 	return !HAL_GPIO_ReadPin(BLUE_BUTTON_GPIO, BLUE_BUTTON_PIN);
 }
 
-
+/*
 static volatile uint32_t t = 0;
+
 void process_ms(void)
 {
 	if(t)
 		t--;
 }
-
+*/
 
 
 int main(void)
@@ -61,7 +62,7 @@ int main(void)
 	BSP_GPIO_PinCfg(BLUE_BUTTON_GPIO, BLUE_BUTTON_PIN, GPIO_MODE_INPUT,GPIO_PULLUP,GPIO_SPEED_FREQ_HIGH);
 
 	//On ajoute la fonction process_ms � la liste des fonctions appel�es automatiquement chaque ms par la routine d'interruption du p�riph�rique SYSTICK
-	Systick_add_callback_function(&process_ms);
+	//Systick_add_callback_function(&process_ms);
 
 
 	//On initialise l'�cran
@@ -70,14 +71,17 @@ int main(void)
 	ILI9341_Rotate(ILI9341_Orientation_Landscape_2);
 
 	//On affiche la page de configuration :
-	ihm_AffichePageCourante();
+	//ihm_AffichePageCourante();
 
+	initBuffer();
+	initScreen();
 
 	//XPT2046_demo();
 
-
 	while(1)	//boucle de t�che de fond
 	{
-		affichage_Listen();
+		if(UART_data_ready(UART2_ID)) {
+			addToBuffer();
+		}
 	}
 }
