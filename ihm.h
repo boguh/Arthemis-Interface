@@ -88,3 +88,10 @@ void ihm_changePage(ihm_typePage page);
  * Affiche la page courante
  */
 void ihm_AffichePageCourante(void);
+
+//------------------------------------------------------------------------------------------------------------------
+
+/**
+ * Affiche la donnée reçue par l'UART
+ */
+void ihm_AfficheDonnee(char c);
