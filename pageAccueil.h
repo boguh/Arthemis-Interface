@@ -1,7 +1,7 @@
 /*
  * pageAccueil.h
  *
- *  Created on: 15 déc. 2022
+ *  Created on: 15 dï¿½c. 2022
  *      Author: bourdahu
  */
 
@@ -13,7 +13,7 @@
 //------------------------------------------------------------------------------------------------------------------
 
 /**
- * Bibilothèques
+ * Bibilothï¿½ques
  */
 #include "ihm/ihm.h"
 
@@ -27,9 +27,18 @@ void pageAccueil_DrawPage(void);
 //------------------------------------------------------------------------------------------------------------------
 
 /**
- * @param x : coordonnée appuyée en abscisse
- * @param y : coordonnée appuyée en ordonnée
+ * @param x : coordonnï¿½e appuyï¿½e en abscisse
+ * @param y : coordonnï¿½e appuyï¿½e en ordonnï¿½e
  *
- * Permet d'effectuer une action en fonctiondes coordonées appuyées sur la page d'accueil
+ * Permet d'effectuer une action en fonctiondes coordonï¿½es appuyï¿½es sur la page d'accueil
  */
 void pageAccueil_Actions(int16_t x, int16_t y);
+
+//------------------------------------------------------------------------------------------------------------------
+
+/**
+ * @param time : nombre d'itÃ©ration
+ *
+ * Permet de faire clignoter le texte "Cliquer"
+ */
+void affichage_Cliquer(void);

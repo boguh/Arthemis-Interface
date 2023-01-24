@@ -14,6 +14,9 @@
 
 //------------------------------------------------------------------------------------------------------------------
 
+static volatile uint16_t t_accueil = 0;
+
+
 /**
  * Dessine la page d'accueil
  */
@@ -34,16 +37,7 @@ void pageAccueil_DrawPage(void) {
 	ILI9341_Puts(70,20, "Artemis Interface", &Font_11x18, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 	ILI9341_Puts(100,50, "BIENVENUE", &Font_11x18, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE);
 
-	int nb = 0;
-	for (int i=0; i<6; i++){
-		nb++;
-		Delay_us(500000);
-		if(nb%2==0){
-			ILI9341_Puts(230,200, "Cliquer", &Font_11x18, ILI9341_COLOR_BLACK, ILI9341_COLOR_GRIS3_ihm);
-		}else{
-			ILI9341_Puts(230,200, "Cliquer", &Font_11x18, ILI9341_COLOR_GRIS3_ihm, ILI9341_COLOR_GRIS3_ihm);
-		}
-	}
+	//Systick_add_callback_function(&affichage_Cliquer);
 }
 
 //------------------------------------------------------------------------------------------------------------------
@@ -59,11 +53,33 @@ void pageAccueil_Actions(int16_t x, int16_t y) {
 		ILI9341_DrawFilledRectangle(230,200,320,240,ILI9341_COLOR_GRIS3_ihm);
 		ILI9341_DrawFilledRectangle(0,0,320,13,ILI9341_COLOR_BLACK);
 		ILI9341_DrawFilledRectangle(0,227,320,240,ILI9341_COLOR_BLACK);
+		//Systick_remove_callback_function(&affichage_Cliquer);
 		for (int i=5; i<315; i++){
 			ILI9341_DrawFilledCircle(i,85,5,ILI9341_COLOR_BLACK);
 			Delay_us(5000);
 		}
 		ihm_changePage(Page_Config);
 		ihm_AffichePageCourante();
+	}
+}
+
+//------------------------------------------------------------------------------------------------------------------
+
+/**
+ * @param time : nombre d'itération
+ *
+ * Permet de faire clignoter le texte "Cliquer"
+ */
+void affichage_Cliquer(void){
+	//TODO : add to the callback function the ability to blink and to interact w/ the screen
+	t_accueil++;
+	if (t_accueil<1000) {
+		if(t_accueil%4 != 0){
+			ILI9341_Puts(230,200, "Cliquer", &Font_11x18, ILI9341_COLOR_BLACK, ILI9341_COLOR_GRIS3_ihm);
+		}else{
+			ILI9341_Puts(230,200, "Cliquer", &Font_11x18, ILI9341_COLOR_GRIS3_ihm, ILI9341_COLOR_GRIS3_ihm);
+		}
+	} else {
+		t_accueil = 0;
 	}
 }
