@@ -2,27 +2,27 @@
  * ihm.c
  *
  *  Created on: 29 nov. 2022
- *      Author: bourdahu
+ *      Author: bourdahu & bourhima
  */
 
 //------------------------------------------------------------------------------------------------------------------
 
 /**
- * Biblioth�ques
+ * Bibliotheques
  */
 #include "ihm.h"
 
 //------------------------------------------------------------------------------------------------------------------
 
 /**
- * On d�clare une variable static qui permet de retenir la page courante affich�e
+ * @brief Le type de la page courante, utile si on a plusieurs pages
  */
-static ihm_typePage type_page_courante = Page_Accueil;
+ihm_typePage type_page_courante = Page_Accueil;
 
 //------------------------------------------------------------------------------------------------------------------
 
 /**
- * Efface la page courante
+ * @brief Efface la page courante
  */
 void ihm_CleanPage() {
 	ILI9341_Fill(ILI9341_COLOR_WHITE);
@@ -31,10 +31,11 @@ void ihm_CleanPage() {
 //------------------------------------------------------------------------------------------------------------------
 
 /**
- * @param x0 : abscisse du coin sup�rieur gauche
- * @param y0 : ordonn�e du coin sup�rieur gauche
- * @param x1 : abscisse du coin inf�rieur droit
- * @param y1 : ordonn�e du coin inf�rieur droit
+ * @brief Dessine un rectangle aux bords arrondis
+ * @param x0 : abscisse du coin superieur gauche
+ * @param y0 : ordonnee du coin superieur gauche
+ * @param x1 : abscisse du coin inferieur droit
+ * @param y1 : ordonnee du coin inferieur droit
  * @param RADIUS : rayon de l'arrondi du coin
  * @param color : couleur du rectangle
  */
@@ -61,14 +62,13 @@ void ihm_DrawFilledRoundedRectangle(uint16_t x0, uint16_t y0, uint16_t x1, uint1
 //------------------------------------------------------------------------------------------------------------------
 
 /**
- * @param x0 : abscisse du point de d�part
- * @param y0 : ordonn�e du point de d�part
- * @param x1 : abscisse du point d'arriv�e
- * @param y1 : ordonn�e du point d'arriv�e
- * @param e : �paisseur du trait
+ * @brief Dessine une ligne d'epaisseur passee en parametre
+ * @param x0 : abscisse du point de depart
+ * @param y0 : ordonnee du point de depart
+ * @param x1 : abscisse du point d'arrivee
+ * @param y1 : ordonnee du point d'arrivee
+ * @param e : epaisseur du trait
  * @param color : couleur du trait
- *
- * Permet de dessiner un trait d'�paisseur variable
  */
 void ihm_DrawThickLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t e, uint16_t color) {
 
@@ -105,9 +105,8 @@ void ihm_DrawThickLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8
 //------------------------------------------------------------------------------------------------------------------
 
 /**
- * @ret le type de la page
- *
- * permet de conna�tre le type de la page
+ * @brief Permet de connaitre le type de la page
+ * @ret le type de la page courante
  */
 ihm_typePage ihm_GetTypePage(void) {
 	return type_page_courante;
@@ -116,9 +115,8 @@ ihm_typePage ihm_GetTypePage(void) {
 //------------------------------------------------------------------------------------------------------------------
 
 /**
- * @param page : page � afficher
- *
- * Permet de changer de page
+ * @brief Permet de changer de page si on a plusieurs pages
+ * @param page : page a afficher
  */
 void ihm_changePage(ihm_typePage page) {
 	type_page_courante = page;
@@ -127,7 +125,7 @@ void ihm_changePage(ihm_typePage page) {
 //------------------------------------------------------------------------------------------------------------------
 
 /**
- * Affiche la page courante
+ * @brief Affiche la page courante
  */
 void ihm_AffichePageCourante(void) {
 	switch (ihm_GetTypePage()) {
@@ -150,3 +148,5 @@ void ihm_AffichePageCourante(void) {
 			break;
 	}
 }
+
+//------------------------------------------------------------------------------------------------------------------
